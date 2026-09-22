@@ -1,0 +1,160 @@
+.home { max-width: 1040px; display: flex; flex-direction: column; gap: var(--sp-6); }
+
+/* ---------- Hero ---------- */
+.hero {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--sp-6);
+  padding: var(--sp-8);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background:
+    radial-gradient(120% 140% at 100% 0%, color-mix(in srgb, var(--accent) 22%, transparent) 0%, transparent 55%),
+    radial-gradient(90% 120% at 0% 100%, color-mix(in srgb, var(--mood-5) 14%, transparent) 0%, transparent 60%),
+    var(--bg-subtle);
+  border: 1px solid var(--border);
+}
+.hero h1 { font-size: var(--fs-3xl); letter-spacing: -0.03em; }
+.hero-sub { margin-top: var(--sp-2); color: var(--text-2); font-size: var(--fs-md); }
+.hero-actions { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+
+/* ---------- Widgets ---------- */
+.widget {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  min-width: 0;
+  padding: var(--sp-5);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+.widget-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-6); }
+.widget-head { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); }
+.widget-head h2 { font-size: var(--fs-sm); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-2); }
+.widget-link { display: inline-flex; align-items: center; gap: 4px; color: var(--accent-fg); font-size: var(--fs-sm); font-weight: 600; }
+.widget-link:hover { text-decoration: underline; text-underline-offset: 2px; }
+.widget-empty { display: flex; flex-direction: column; align-items: flex-start; gap: var(--sp-2); padding: var(--sp-2) 0; color: var(--text-2); }
+
+/* Recent entries */
+.recent-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: var(--sp-3);
+}
+.recent-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  min-height: 160px;
+  padding: var(--sp-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  text-align: left;
+  overflow: hidden;
+  transition: border-color var(--fast), box-shadow var(--fast), transform var(--fast);
+}
+.recent-card::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 3px;
+  background: var(--mood, transparent);
+}
+.recent-card:hover { border-color: var(--border-strong); box-shadow: var(--shadow); transform: translateY(-2px); }
+.recent-title { font-weight: 600; line-height: 1.35; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.recent-snippet {
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  color: var(--text-2);
+  font-size: var(--fs-sm);
+}
+.recent-foot { display: flex; align-items: center; justify-content: space-between; color: var(--text-3); font-size: var(--fs-xs); }
+.recent-card.new {
+  align-items: center;
+  justify-content: center;
+  border-style: dashed;
+  border-color: var(--border-strong);
+  background: transparent;
+  color: var(--text-2);
+  font-weight: 600;
+}
+.recent-card.new:hover { border-color: var(--accent); color: var(--accent-fg); background: var(--accent-soft); }
+.new-icon { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--accent-soft); color: var(--accent-fg); }
+
+/* Up next */
+.mini-tasks { list-style: none; margin: 0; padding: 0; }
+.mini-tasks li {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  min-height: 44px;
+  padding: var(--sp-2) 0;
+  border-bottom: 1px solid var(--border);
+  font-size: var(--fs-base);
+}
+.mini-tasks li:last-child { border-bottom: none; }
+.mini-text { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mini-tasks .due { font-size: var(--fs-xs); }
+
+/* Mood insights */
+.mood-insights { display: flex; flex-direction: column; gap: var(--sp-5); }
+.stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-3); }
+.stat { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.stat-icon {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  margin-bottom: var(--sp-2);
+  border-radius: var(--radius);
+  background: var(--hover);
+  color: var(--text-2);
+}
+.stat-icon.streak { background: color-mix(in srgb, var(--mood-2) 16%, transparent); color: var(--mood-2); }
+.stat-icon.emoji { font-size: 16px; }
+.stat-value { font-size: var(--fs-lg); font-weight: 700; letter-spacing: -0.01em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.stat-label { color: var(--text-3); font-size: var(--fs-xs); }
+
+.trend { display: flex; gap: 5px; height: 96px; }
+.trend-day { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.trend-track { flex: 1; width: 100%; display: flex; align-items: flex-end; }
+.trend-bar {
+  width: 100%;
+  border-radius: var(--radius-xs);
+  transform-origin: bottom;
+  animation: grow 0.5s var(--ease) both;
+}
+.trend-bar.no-entry { height: 3px; background: var(--border); }
+.trend-bar.no-mood { height: 3px; background: var(--text-3); }
+.trend-label { color: var(--text-3); font-size: var(--fs-2xs); }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1099px) {
+  .widget-row { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 699px) {
+  .hero { flex-direction: column; align-items: flex-start; padding: var(--sp-6) var(--sp-5); }
+  .hero h1 { font-size: var(--fs-2xl); }
+  .hero-actions { width: 100%; }
+  .hero-actions > * { flex: 1; }
+  .home { gap: var(--sp-4); }
+  .widget { padding: var(--sp-4); }
+  .recent-grid {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    margin: 0 calc(-1 * var(--sp-4));
+    padding: 2px var(--sp-4) var(--sp-2);
+  }
+  .recent-card { flex: 0 0 68%; scroll-snap-align: start; min-height: 150px; }
+  .recent-card.new { flex-basis: 40%; }
+}

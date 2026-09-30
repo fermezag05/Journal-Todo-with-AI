@@ -2,13 +2,15 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 import useLocalStorage from './useLocalStorage.js'
 import { isBlankEntry, normalizeEntry } from './lib/entries.js'
 import { formToTodo, normalizeTodo } from './lib/todos.js'
+import { DAYS, formToBlock, mergeDuplicateBlocks, normalizeBlock } from './lib/itinerary.js'
 
 const StoreContext = createContext(null)
 
-// Shared app data: journal entries, tasks, and the undo toast.
+// Shared app data: journal entries, tasks, the weekly itinerary, and the undo toast.
 export function StoreProvider({ children }) {
   const [rawEntries, setRawEntries] = useLocalStorage('journal-entries', [])
   const [rawTodos, setRawTodos] = useLocalStorage('todos', [])
+  const [rawBlocks, setRawBlocks] = useLocalStorage('itinerary', [])
   const [toast, setToast] = useState(null)
 
   const entries = useMemo(
@@ -16,6 +18,7 @@ export function StoreProvider({ children }) {
     [rawEntries],
   )
   const todos = useMemo(() => rawTodos.map(normalizeTodo), [rawTodos])
+  const blocks = useMemo(() => rawBlocks.map(normalizeBlock), [rawBlocks])
 
   useEffect(() => {
     if (!toast) return
@@ -83,9 +86,37 @@ export function StoreProvider({ children }) {
     setToast({ message, undo: () => setRawTodos((prev) => [...prev, ...items]) })
   }, [setRawTodos])
 
+  // One-time migration: one block per activity, repeating on a list of days.
+  useEffect(() => {
+    setRawBlocks((prev) => mergeDuplicateBlocks(prev.map(normalizeBlock)))
+  }, [setRawBlocks])
+
+  const addBlock = useCallback((form) => {
+    setRawBlocks((prev) => [...prev, { id: crypto.randomUUID(), ...formToBlock(form) }])
+  }, [setRawBlocks])
+
+  const updateBlock = useCallback((id, form) => {
+    setRawBlocks((prev) => prev.map((b) => (b.id === id ? { id, ...formToBlock(form) } : b)))
+  }, [setRawBlocks])
+
+  const deleteBlock = useCallback((block) => {
+    setRawBlocks((prev) => prev.filter((b) => b.id !== block.id))
+    setToast({ message: 'Activity deleted', undo: () => setRawBlocks((prev) => [...prev, block]) })
+  }, [setRawBlocks])
+
+  // Takes one day out of a repeating block; the other days keep it.
+  const removeBlockDay = useCallback((block, day) => {
+    setRawBlocks((prev) => prev.map((b) => (b.id === block.id ? { ...b, days: block.days.filter((d) => d !== day) } : b)))
+    setToast({
+      message: `Removed from ${DAYS[day]}`,
+      undo: () => setRawBlocks((prev) => prev.map((b) => (b.id === block.id ? block : b))),
+    })
+  }, [setRawBlocks])
+
   const value = {
     entries, createEntry, updateEntry, deleteEntry,
     todos, addTodo, updateTodo, toggleTodo, deleteTodos,
+    blocks, addBlock, updateBlock, deleteBlock, removeBlockDay,
     toast, setToast,
   }
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>

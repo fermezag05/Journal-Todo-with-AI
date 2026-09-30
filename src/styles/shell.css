@@ -116,6 +116,7 @@
 .menu-icon { display: grid; place-items: center; width: 32px; height: 32px; border-radius: var(--radius); flex-shrink: 0; }
 .menu-icon.journal { background: var(--accent-soft); color: var(--accent-fg); }
 .menu-icon.tasks { background: color-mix(in srgb, var(--info) 15%, transparent); color: var(--info); }
+.menu-icon.itinerary { background: color-mix(in srgb, var(--purple) 15%, transparent); color: var(--purple); }
 
 /* Nav */
 .side-nav { display: flex; flex-direction: column; gap: 2px; }

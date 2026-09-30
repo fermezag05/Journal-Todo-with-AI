@@ -2,16 +2,19 @@ import { NavLink } from 'react-router-dom'
 import Icon from './Icon.jsx'
 import NewMenu from './NewMenu.jsx'
 import ThemeSwitcher from './ThemeSwitcher.jsx'
+import { todayIndex } from '../lib/itinerary.js'
 import { useStore } from '../store.jsx'
 
 export default function Sidebar({ theme, onClose }) {
-  const { entries, todos } = useStore()
+  const { entries, todos, blocks } = useStore()
   const openTasks = todos.filter((t) => !t.done).length
+  const todayBlocks = blocks.filter((b) => b.days.includes(todayIndex())).length
 
   const links = [
     { to: '/', label: 'Home', icon: 'home', end: true },
     { to: '/journal', label: 'Journal', icon: 'note', count: entries.length },
     { to: '/tasks', label: 'Tasks', icon: 'check', count: openTasks },
+    { to: '/itinerary', label: 'Itinerary', icon: 'calendar', count: todayBlocks },
   ]
 
   return (

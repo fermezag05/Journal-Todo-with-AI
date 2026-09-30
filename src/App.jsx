@@ -5,12 +5,13 @@ import NewMenu from './components/NewMenu.jsx'
 import Sidebar from './components/Sidebar.jsx'
 import Toast from './components/Toast.jsx'
 import Home from './pages/Home.jsx'
+import Itinerary from './pages/Itinerary.jsx'
 import Journal from './pages/Journal.jsx'
 import Tasks from './pages/Tasks.jsx'
 import { useStore } from './store.jsx'
 import { useTheme } from './theme.js'
 
-const TITLES = { '/': 'Home', '/journal': 'Journal', '/tasks': 'Tasks' }
+const TITLES = { '/': 'Home', '/journal': 'Journal', '/tasks': 'Tasks', '/itinerary': 'Itinerary' }
 
 export default function App() {
   const [pref, setPref, resolved] = useTheme()
@@ -44,6 +45,7 @@ export default function App() {
           <Route path="/journal" element={<Journal />} />
           <Route path="/journal/:entryId" element={<Journal />} />
           <Route path="/tasks" element={<Tasks />} />
+          <Route path="/itinerary" element={<Itinerary />} />
           <Route path="/todo" element={<Navigate to="/tasks" replace />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
